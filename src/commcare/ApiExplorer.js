@@ -1,11 +1,10 @@
 import React, {useState}  from 'react';
-import './ApiExplorer.css';
 import {ApiKey} from "./ApiKey";
+import {fetchCommCareApi} from "./Client";
 
-console.log(process.env.REACT_APP_WEATHER_API_KEY)
+
 
 function ApiExplorer() {
-  console.log(process.env);
   const [username, setUsername] = useState(process.env.REACT_APP_COMMCARE_DEFAULT_USERNAME);
   const [apiKey, setApiKey] = useState(process.env.REACT_APP_COMMCARE_DEFAULT_API_KEY);
   const [api, setApi] = useState(process.env.REACT_APP_COMMCARE_DEFAULT_API);
@@ -13,24 +12,20 @@ function ApiExplorer() {
   const [isLoading, setIsLoading] = useState(false);
   const hitApi = function () {
     setIsLoading(true);
-    fetch(api,
-      {
-        method: "GET",
-        headers: new Headers({
-          Authorization: `ApiKey ${username}:${apiKey}`
-        })
+    fetchCommCareApi(
+      api, username, apiKey, {
+        onSuccess: (response) => {
+          setIsLoading(false);
+          setApiData(JSON.stringify(response, null, 2));
+        },
+        onError: (error) => {
+          setIsLoading(false);
+          console.error(error);
+          debugger;
+          setApiData(error.message);
+        }
       }
-    )
-      .then(res => res.json())
-      .then(response => {
-        setIsLoading(false);
-        setApiData(JSON.stringify(response, null, 2));
-      })
-      .catch(error => {
-        setIsLoading(false);
-        console.error(error);
-        setApiData(JSON.stringify(error));
-      });
+    );
   };
 
   return (
@@ -48,7 +43,7 @@ function ApiExplorer() {
       <input type="button" onClick={() => hitApi()} value="Request API"/>
       <h2>API Results</h2>
       <pre>
-        {apiData}
+        {isLoading ? "Loading..." : apiData}
       </pre>
     </div>
   );
