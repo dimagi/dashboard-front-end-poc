@@ -1,11 +1,14 @@
-import React, {useState, useEffect}  from 'react';
+import React, {useState}  from 'react';
 import './ApiExplorer.css';
 import {ApiKey} from "./ApiKey";
 
+console.log(process.env.REACT_APP_WEATHER_API_KEY)
+
 function ApiExplorer() {
-  const [username, setUsername] = useState('');
-  const [apiKey, setApiKey] = useState('');
-  const [api, setApi] = useState('');
+  console.log(process.env);
+  const [username, setUsername] = useState(process.env.REACT_APP_COMMCARE_DEFAULT_USERNAME);
+  const [apiKey, setApiKey] = useState(process.env.REACT_APP_COMMCARE_DEFAULT_API_KEY);
+  const [api, setApi] = useState(process.env.REACT_APP_COMMCARE_DEFAULT_API);
   const [apiData, setApiData] = useState('')
   const [isLoading, setIsLoading] = useState(false);
   const hitApi = function () {
