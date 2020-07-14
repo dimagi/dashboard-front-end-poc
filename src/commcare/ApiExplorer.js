@@ -1,8 +1,8 @@
 import React, {useState, useEffect}  from 'react';
-import './App.css';
-import {ApiKey} from "./commcare/ApiKey";
+import './ApiExplorer.css';
+import {ApiKey} from "./ApiKey";
 
-function App() {
+function ApiExplorer() {
   const [username, setUsername] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [api, setApi] = useState('');
@@ -31,7 +31,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="ApiExplorer">
       <h1>CommCare API Explorer</h1>
       <ApiKey username={username} apiKey={apiKey}
               onUsernameChanged={(username) => setUsername(username)}
@@ -51,4 +51,4 @@ function App() {
   );
 }
 
-export default App;
+export default ApiExplorer;
