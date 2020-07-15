@@ -36,23 +36,21 @@ function ReportDashboard(props) {
 }
 
 function ListView(props) {
-  console.log(props);
   return (
     <table>
       <thead>
       <tr>
-        {props.columns ? props.columns.map(item => {
-          return <th>{item.header}</th>
+        {props.columns ? props.columns.map((item, index) => {
+          return <th key={index}>{item.header}</th>
         }) : <th>No data</th>}
       </tr>
       </thead>
       <tbody>
-      {props.data ? props.data.map(row => {
-        console.log('row', row);
+      {props.data ? props.data.map((row, index) => {
         return (
-          <tr>
-            { Object.keys(row).map(item => {
-              return <td>{row[item]}</td>
+          <tr key={index}>
+            { Object.keys(row).map((item, index) => {
+              return <td key={index}>{row[item]}</td>
             })}
           </tr>
         )
