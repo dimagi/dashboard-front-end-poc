@@ -2,7 +2,11 @@
 
 
 export function fetchCommCareApi(api, username, apiKey, options) {
-  fetch(api,
+  let url = new URL(api);
+  if (options.urlParams) {
+    url.search = new URLSearchParams(options.urlParams).toString();
+  }
+  fetch(url,
     {
       method: "GET",
       headers: new Headers({
