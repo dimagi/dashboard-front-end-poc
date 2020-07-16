@@ -19,7 +19,7 @@ function App() {
   }
   const navLinks = (<ul>
     <li><a onClick={() => setTab('explorer')}>API Explorer</a></li>
-    <li><a onClick={() => setTab('dashboard')}>Demo Dashboard</a></li>
+    <li><a onClick={() => setTab('dashboard')}>Report Explorer</a></li>
   </ul>);
   return (
     <div className="App">
