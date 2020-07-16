@@ -3,11 +3,7 @@ import {fetchCommCareApi} from "./Client";
 import {listReports} from "./Reports";
 
 function ReportDashboard(props) {
-  const aggregateReport = process.env.REACT_APP_COMMCARE_AGGREGATE_REPORT;
-  const listReport = process.env.REACT_APP_COMMCARE_LIST_REPORT;
   const [domain, setDomain] = useState(process.env.REACT_APP_COMMCARE_DOMAIN);
-  const [aggregateData, setAggregateData] = useState({});
-  const [listData, setListData] = useState({});
   const [allReports, setAllReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
 
@@ -24,25 +20,6 @@ function ReportDashboard(props) {
   }, [domain]);
 
 
-  useEffect(() => {
-    const params = {};
-    if (selectedChoice !== ALL) {
-      params.activity_name_077ac727_string_1 = selectedChoice;
-    }
-
-    fetchCommCareApi(
-      aggregateReport, props.username, props.apiKey, {
-        onSuccess: setAggregateData,
-        urlParams: params,
-      }
-    );
-    fetchCommCareApi(
-      listReport, props.username, props.apiKey, {
-        onSuccess: setListData,
-      }
-    );
-  }, [selectedChoice]);
-
   return (
     <div className="ReportDashboard">
       <p>Domain</p>
@@ -57,14 +34,6 @@ function ReportDashboard(props) {
           return <option key={index} value={choice} >{choice}</option>
         })}
       </select>
-      {/*<h2>Summary: Cases Reported Today</h2>*/}
-      {/*<ListView {...aggregateData} />*/}
-      {/*<h2>List: Cases Reported Today</h2>*/}
-      {/*<ListView {...listData} />*/}
-
-      {/*<h2>Debug data</h2>*/}
-      {/*<pre>{ JSON.stringify(aggregateData, null, 2) }</pre>*/}
-      {/*<pre>{ JSON.stringify(listData, null, 2) }</pre>*/}
     </div>
   )
 }
