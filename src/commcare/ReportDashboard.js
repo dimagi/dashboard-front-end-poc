@@ -9,7 +9,7 @@ function ReportDashboard(props) {
   const [aggregateData, setAggregateData] = useState({});
   const [listData, setListData] = useState({});
   const [allReports, setAllReports] = useState([]);
-
+  const [selectedReport, setSelectedReport] = useState(null);
 
   const ALL = 'all';
   const choiceFilterOptions = [ALL, "hiking", "running", "surfing"];
@@ -48,7 +48,8 @@ function ReportDashboard(props) {
       <p>Domain</p>
       <input type="text" value={domain} onChange={(event) => setDomain(event.target.value)}/>
       <h2>All Reports in {domain}</h2>
-      <ReportList reports={allReports}></ReportList>
+      <ReportList reports={allReports} reportClicked={setSelectedReport}></ReportList>
+      { selectedReport ? <Report domain={domain} username={props.username} apiKey={props.apiKey} {...selectedReport} /> : <p>Select a Report to View Data</p>}
       <h2>Filters</h2>
       <p>Type</p>
       <select onChange={(event) => setSelectedChoice(event.target.value)}>
@@ -56,24 +57,26 @@ function ReportDashboard(props) {
           return <option key={index} value={choice} >{choice}</option>
         })}
       </select>
-      <h2>Summary: Cases Reported Today</h2>
-      <ListView {...aggregateData} />
-      <h2>List: Cases Reported Today</h2>
-      <ListView {...listData} />
+      {/*<h2>Summary: Cases Reported Today</h2>*/}
+      {/*<ListView {...aggregateData} />*/}
+      {/*<h2>List: Cases Reported Today</h2>*/}
+      {/*<ListView {...listData} />*/}
 
-      <h2>Debug data</h2>
-      <pre>{ JSON.stringify(aggregateData, null, 2) }</pre>
-      <pre>{ JSON.stringify(listData, null, 2) }</pre>
+      {/*<h2>Debug data</h2>*/}
+      {/*<pre>{ JSON.stringify(aggregateData, null, 2) }</pre>*/}
+      {/*<pre>{ JSON.stringify(listData, null, 2) }</pre>*/}
     </div>
   )
 }
 
 function ListView(props) {
+  console.log("list view", props)
   return (
     <table>
       <thead>
       <tr>
         {props.columns ? props.columns.map((item, index) => {
+          console.log(item);
           return <th key={index}>{item.header}</th>
         }) : <th>No data</th>}
       </tr>
@@ -105,7 +108,7 @@ function ReportList(props) {
         <tbody>
         {props.reports.map((report, index) => {
           return (
-            <tr key={index}>
+            <tr key={index} onClick={() => props.reportClicked(report)}>
               <td>{report.title}</td>
             </tr>
           )
@@ -116,6 +119,23 @@ function ReportList(props) {
   } else {
     return <p>No reports found...</p>
   }
+}
+
+function Report(props) {
+  const [reportData, setReportData] = useState({});
+  const url = `https://www.commcarehq.org/a/${props.domain}/api/v0.5/configurablereportdata/${props.id}/`;
+  useEffect(() => {
+    fetchCommCareApi(
+      url, props.username, props.apiKey, {
+        onSuccess: setReportData,
+      }
+    );
+  }, [props.id]);
+  console.log(props);
+  return <div className="Report">
+    <h1>{props.title}</h1>
+    <ListView {...reportData} />
+  </div>
 }
 export default ReportDashboard;
 
