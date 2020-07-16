@@ -25,7 +25,7 @@ function ApiExplorer(props) {
       }
     );
   };
-
+  const debug = <p>Your username is <strong>{props.username}</strong> and your api key is <strong>{props.apiKey}</strong></p>;
   return (
     <div className="ApiExplorer">
       <h1>CommCare API Explorer</h1>
@@ -33,7 +33,7 @@ function ApiExplorer(props) {
               onUsernameChanged={(username) => props.setUsername(username)}
               onApiKeyChanged={(apiKey) => props.setApiKey(apiKey)}
       />
-      <p>Your username is <strong>{props.username}</strong> and your api key is <strong>{props.apiKey}</strong></p>
+      {props.devMode ? debug : ''}
       <h2>API Url</h2>
       <input type="text" style={{width: "60em"}} value={api} onChange={(event) => setApi(event.target.value)}/>
       <br />
