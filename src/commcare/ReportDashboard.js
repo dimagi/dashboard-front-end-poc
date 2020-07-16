@@ -4,14 +4,23 @@ import {fetchCommCareApi} from "./Client";
 function ReportDashboard(props) {
   const aggregateReport = process.env.REACT_APP_COMMCARE_AGGREGATE_REPORT;
   const listReport = process.env.REACT_APP_COMMCARE_LIST_REPORT;
-
   const [aggregateData, setAggregateData] = useState({});
   const [listData, setListData] = useState({});
 
+  const ALL = 'all';
+  const choiceFilterOptions = [ALL, "hiking", "running", "surfing"];
+  const [selectedChoice, setSelectedChoice] = useState(choiceFilterOptions[0]);
+  const [selectedDate, setSelectedDate] = useState(null);
+
   useEffect(() => {
+    const params = {};
+    if (selectedChoice !== ALL) {
+      params.activity_name_077ac727_string_1 = selectedChoice;
+    }
     fetchCommCareApi(
       aggregateReport, props.username, props.apiKey, {
         onSuccess: setAggregateData,
+        urlParams: params,
       }
     );
     fetchCommCareApi(
@@ -19,10 +28,17 @@ function ReportDashboard(props) {
         onSuccess: setListData,
       }
     );
-  }, []);
+  }, [selectedChoice]);
 
   return (
     <div className="ReportDashboard">
+      <h2>Filters</h2>
+      <p>Type</p>
+      <select onChange={(event) => setSelectedChoice(event.target.value)}>
+        {choiceFilterOptions.map((choice, index) => {
+          return <option key={index} value={choice} >{choice}</option>
+        })}
+      </select>
       <h2>Aggregate data</h2>
       <ListView {...aggregateData} />
       <h2>List data</h2>
