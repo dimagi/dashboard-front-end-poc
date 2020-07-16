@@ -27,41 +27,14 @@ function ReportDashboard(props) {
       <h2>All Reports in {domain}</h2>
       <ReportList reports={allReports} reportClicked={setSelectedReport}></ReportList>
       { selectedReport ? <Report domain={domain} username={props.username} apiKey={props.apiKey} {...selectedReport} /> : <p>Select a Report to View Data</p>}
-      <h2>Filters</h2>
-      <p>Type</p>
-      <select onChange={(event) => setSelectedChoice(event.target.value)}>
-        {choiceFilterOptions.map((choice, index) => {
-          return <option key={index} value={choice} >{choice}</option>
-        })}
-      </select>
+      {/*<h2>Filters</h2>*/}
+      {/*<p>Type</p>*/}
+      {/*<select onChange={(event) => setSelectedChoice(event.target.value)}>*/}
+        {/*{choiceFilterOptions.map((choice, index) => {*/}
+          {/*return <option key={index} value={choice} >{choice}</option>*/}
+        {/*})}*/}
+      {/*</select>*/}
     </div>
-  )
-}
-
-function ListView(props) {
-  console.log("list view", props)
-  return (
-    <table>
-      <thead>
-      <tr>
-        {props.columns ? props.columns.map((item, index) => {
-          console.log(item);
-          return <th key={index}>{item.header}</th>
-        }) : <th>No data</th>}
-      </tr>
-      </thead>
-      <tbody>
-      {props.data ? props.data.map((row, index) => {
-        return (
-          <tr key={index}>
-            { Object.keys(row).map((item, index) => {
-              return <td key={index}>{row[item]}</td>
-            })}
-          </tr>
-        )
-      }) : <tr><td>No data</td></tr>}
-      </tbody>
-    </table>
   )
 }
 
@@ -103,8 +76,35 @@ function Report(props) {
   console.log(props);
   return <div className="Report">
     <h1>{props.title}</h1>
-    <ListView {...reportData} />
+    <ReportTable {...reportData} />
   </div>
 }
-export default ReportDashboard;
 
+
+function ReportTable(props) {
+  return (
+    <table>
+      <thead>
+      <tr>
+        {props.columns ? props.columns.map((item, index) => {
+          console.log(item);
+          return <th key={index}>{item.header}</th>
+        }) : <th>No data</th>}
+      </tr>
+      </thead>
+      <tbody>
+      {props.data ? props.data.map((row, index) => {
+        return (
+          <tr key={index}>
+            { Object.keys(row).map((item, index) => {
+              return <td key={index}>{row[item]}</td>
+            })}
+          </tr>
+        )
+      }) : <tr><td>No data</td></tr>}
+      </tbody>
+    </table>
+  )
+}
+
+export default ReportDashboard;
